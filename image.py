@@ -1,5 +1,29 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import requests
+import io
+
+url="https://raw.githubusercontent.com/HaoHoo/HOL-AI/master/data/MNIST Test 10k 28x28 dense.csv"
+stream=requests.get(url).content
+frame=pd.read_csv(io.StringIO(stream.decode('utf-8')), sep='\t', header=0)
+frame
+
+data_np_array=frame.values
+print(data_np_array)
+print(data_np_array.shape)
+
+select_img_array=data_np_array[999,1:]
+print(select_img_array)
+print(select_img_array.shape)
+
+img_data=select_img_array.reshape((28,28))
+print(img_data)
+print(img_data.shape)
+
+plt.gray()
+plt.imshow(img_data)
+
 arrdat=np.loadtxt("https://raw.githubusercontent.com/HaoHoo/HOL-AI/master/data/HOL_MNIST_test.csv", 'i2', delimiter=",")
 imgdat=arrdat.reshape(10,28,28)
 fig, axs = plt.subplots(2, 5)

@@ -1,0 +1,160 @@
+1.2.5
+
+import numpy as np
+data_np_array=frame.values
+print(data_np_array)
+print(data_np_array.shape)
+
+1.2.6
+
+select_img_array=data_np_array[999,1:]
+print(select_img_array)
+print(select_img_array.shape)
+
+1.2.7
+
+img_data=select_img_array.reshape((28,28))
+print(img_data)
+print(img_data.shape)
+
+1.2.8
+
+plt.gray()
+plt.imshow(img_data)
+
+2.1.3
+
+input Picture [28,28];
+hidden H1 [200] from Picture all;
+hidden H2 [200] from H1 all;
+output Result [10] softmax from H2 all;
+
+2.4.5
+
+dataset1 <- maml.mapInputPort(1)
+feat <- data.matrix(dataset1[,2:11])
+total = sum(sum(feat))
+correct = sum(diag(feat))
+accuracy = correct / total
+acc = as.data.frame(accuracy)
+maml.mapOutputPort("acc");
+
+3.2.5
+
+const { T = true; F = false; }
+
+const {
+// input image size
+ImgW = 28;
+ImgH = 28;
+
+// first convolutional layer parameters
+C1Maps = 5;
+C1KernW = 5;
+C1KernH = 5;
+C1StrideW = 1;
+C1StrideH = 1;
+// The following formula computes dimensions with padding enabled.
+C1OutW = (ImgW - 1) / C1StrideW + 1;
+C1OutH = (ImgH - 1) / C1StrideH + 1;
+
+// first pooling layer parameters
+P1KernW = 2;
+P1KernH = 2;
+P1StrideW = 2;
+P1StrideH = 2;
+// The following formula computes dimensions with no padding.
+P1OutW = (C1OutW - P1KernW) / P1StrideW + 1;
+P1OutH = (C1OutH - P1KernH) / P1StrideH + 1;
+
+// second convolutional layer parameters
+C2Maps = 10;
+C2KernW = 5;
+C2KernH = 5;
+C2StrideW = 1;
+C2StrideH = 1;
+// The following formula computes dimensions with padding enabled.
+C2OutW = (P1OutW - 1) / C2StrideW + 1;
+C2OutH = (P1OutH - 1) / C2StrideH + 1;
+// Since Z dimension of the kernel is 1 and sharing is disabled in Z dimension
+// total number of maps is a product of input maps and layer maps.
+C2OutZ = C2Maps * C1Maps;
+
+// second pooling layer parameters
+P2KernW = 2;
+P2KernH = 2;
+P2StrideW = 2;
+P2StrideH = 2;
+// The following formula computes dimensions with no padding.
+P2OutW = (C2OutW - P2KernW) / P2StrideW + 1;
+P2OutH = (C2OutH - P2KernH) / P2StrideH + 1;
+}
+
+input Picture [ImgH, ImgW];
+
+hidden C1 [C1Maps, C1OutH, C1OutW]
+  from Picture convolve {
+    InputShape  = [ImgH, ImgW];
+    KernelShape = [C1KernH, C1KernW];
+    Stride      = [C1StrideH, C1StrideW];
+    Padding     = [T, T];
+    MapCount = C1Maps;
+  }
+
+hidden P1 [C1Maps, P1OutH, P1OutW]
+  from C1 max pool {
+    InputShape  = [C1Maps, C1OutH, C1OutW];
+    KernelShape = [1, P1KernH, P1KernW];
+    Stride      = [1, P1StrideH, P1StrideW];
+  }
+
+hidden C2 [C2OutZ, C2OutH, C2OutW]
+  from P1 convolve {
+    InputShape  = [C1Maps, P1OutH, P1OutW];
+    KernelShape = [1, C2KernH, C2KernW];
+    Stride      = [1, C2StrideH, C2StrideW];
+    Sharing     = [F, T, T];
+    Padding     = [F, T, T];
+    MapCount = C2Maps;
+  }
+
+hidden P2 [C2OutZ, P2OutH, P2OutW]
+  from C2 max pool {
+    InputShape  = [C2OutZ, C2OutH, C2OutW];
+    KernelShape = [1,  P2KernH, P2KernW];
+    Stride      = [1,  P2StrideH, P2StrideW];
+  }
+
+hidden H3 [100]
+  from P2 all;
+
+output Result [10] softmax
+  from H3 all;
+
+3.3.5
+
+https://raw.githubusercontent.com/HaoHoo/HOL-AI/master/data/HOL_MNIST_test.csv 
+
+3.3.8
+
+import numpy as np
+import matplotlib.pyplot as plt
+arrdat=np.loadtxt("https://raw.githubusercontent.com/HaoHoo/HOL-AI/master/data/HOL_MNIST_test.csv", 'i2', delimiter=",")
+imgdat=arrdat.reshape(10,28,28)
+fig, axs = plt.subplots(2, 5)
+fig.subplots_adjust(left=0.06, right=0.75, top=0.43, bottom=0.06, hspace=0, wspace=0.07)
+images = []
+k=0
+for i in range(2):
+    for j in range(5):
+        images.append(axs[i,j].imshow(imgdat[k,]))
+        axs[i,j].set_xticklabels('')
+        axs[i,j].set_yticklabels('')
+        axs[i,j].set_xticks([0,13,27])
+        axs[i,j].set_yticks([0,13,27])
+        k=k+1      
+axs[1,0].set_xticklabels((0,13,27))
+axs[1,0].set_yticklabels((27,13,0))
+plt.show()
+
+
