@@ -23,6 +23,7 @@ print(img_data.shape)
 
 plt.gray()
 plt.imshow(img_data)
+plt.show()
 
 arrdat=np.loadtxt("https://raw.githubusercontent.com/HaoHoo/HOL-AI/master/data/HOL_MNIST_test.csv", 'i2', delimiter=",")
 imgdat=arrdat.reshape(10,28,28)
