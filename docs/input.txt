@@ -18,6 +18,7 @@ print(img_data)
 print(img_data.shape)
 
 1.2.8
+
 %matplotlib inline
 import matplotlib.pyplot as plt
 plt.gray()
